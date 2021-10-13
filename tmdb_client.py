@@ -1,5 +1,5 @@
 import requests, random
-API_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhNGY3NWRhZDNjOWNmMDYwYThiMjY4MGY3NTQxOTE3OSIsInN1YiI6IjYxNWVlZWUzNjdlMGY3MDA0Mzg4YjA0OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.4TCwbzHc7Wajk13HfNEm4v2AH_DLzQ2x3y2WVpj6Jf4"
+API_TOKEN = "secret key "
 
 
 def get_popular_movies():
@@ -10,10 +10,6 @@ def get_popular_movies():
     }
     response = requests.get(endpoint, headers=headers)
     return response.json()
-
-data = get_popular_movies()
-for key  in data:
-    print( key )
 
 def get_movies_list(list_type):
     endpoint = f"https://api.themoviedb.org/3/movie/{list_type}"
