@@ -1,7 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests,json
-import tmdb_client
-import random
+import tmdb_client,random
+
 app = Flask(__name__)
 
 
@@ -10,8 +10,10 @@ def homepage():
 #__Użycie funkcji get_movie_info do zbudowania słownika zawierającego_____#
 #__tytuł i URL do plakatu dla każdego filmu, który będziemy wyświetlać____#
    # ver 1. movies = tmdb_client.get_popular_movies()["results"][:8]
-     movies = tmdb_client.get_movies(how_many=8)
-     return render_template("homepage.html", movies=movies)
+    selected_list = request.args.get('list_type', "popular")
+    genres = tmdb_client.get_genres()
+    movies = tmdb_client.get_movies(how_many=8, list_type=selected_list)
+    return render_template("homepage.html", movies=movies, current_list=selected_list, genres=genres)
     
 #_________________________________________________________________________#
 ###___każdy szablon będzie miał dostępny obiekt o nazwie tmdb_image_url___#
@@ -26,11 +28,10 @@ def utility_processor():
 @app.route("/movie/<movie_id>")
 def movie_details(movie_id):
     details = tmdb_client.get_single_movie(movie_id)
-   
     movie_images = tmdb_client.get_movie_images(movie_id)
-    
-    return render_template("movie_details.html", movie=details, selected_backdrop= movie_images)
-
+    cast = tmdb_client.get_single_movie_cast(movie_id)
+    selected_backdrop = random.choice(movie_images['backdrops'])
+    return render_template("movie_details.html", movie=details, cast=cast, selected_backdrop=selected_backdrop)
 
 
 
